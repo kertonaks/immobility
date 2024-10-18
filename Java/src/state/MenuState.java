@@ -1,4 +1,5 @@
 package state;
 
-public class MenuState {
+public interface MenuState {
+    void handle();  // Це інтерфейс з методом handle(), який будуть реалізовувати стани меню
 }
