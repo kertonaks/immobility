@@ -3,6 +3,13 @@ package state;
 import java.util.Scanner;
 import service.RealEstateService;
 public class RentMenuState implements MenuState {  // Реалізуємо MenuState
+
+    private final RealEstateService realEstateService;
+
+    public RentMenuState(RealEstateService realEstateService) {
+        this.realEstateService = realEstateService;
+    }
+
     @Override
     public void handle() {
         System.out.println("Rent Menu:");
@@ -27,15 +34,14 @@ public class RentMenuState implements MenuState {  // Реалізуємо MenuS
                 System.out.println("Selected Garage for Rent");
                 break;
             case 4:
-                RealEstateService realEstateService = new RealEstateService();
                 realEstateService.sortByPrice();  // Перевірте, що метод `sortByPrice()` існує в RealEstateService
                 break;
             case 5:
-                context.setState(new MainMenuState());  // Переконайтесь, що MainMenuState імпортовано правильно
+                context.setState(new MainMenuState(realEstateService));  // Переконайтесь, що MainMenuState імпортовано правильно
                 break;
             default:
                 System.out.println("Invalid choice, please try again.");
-                context.setState(new RentMenuState());
+                context.setState(new RentMenuState(realEstateService));
                 break;
         }
 

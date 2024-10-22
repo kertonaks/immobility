@@ -1,7 +1,7 @@
 package model;
 
 public class Apartment extends RealEstate {
-    private int rooms;
+    private final int rooms;
 
     public Apartment(String address, double price, int rooms) {
         super(address, price);

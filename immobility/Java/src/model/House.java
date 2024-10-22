@@ -1,7 +1,7 @@
 package model;
 
 public class House extends RealEstate {
-    private double landArea;
+    private final double landArea;
 
     public House(String address, double price, double landArea) {
         super(address, price);

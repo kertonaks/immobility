@@ -1,8 +1,16 @@
 package state;
 
+import service.RealEstateService;
+
 import java.util.Scanner;
 
-public class MainMenuState implements MenuState {  // Реалізуємо MenuState
+public class MainMenuState implements MenuState {
+   private final RealEstateService realEstateService;
+
+    public MainMenuState(RealEstateService realEstateService) {
+        this.realEstateService = realEstateService;
+    }
+
     @Override
     public void handle() {
         System.out.println("Main Menu:");
@@ -16,10 +24,10 @@ public class MainMenuState implements MenuState {  // Реалізуємо MenuS
         MenuContext context = new MenuContext();
         switch (choice) {
             case 1:
-                context.setState(new RentMenuState());  // Переконайтесь, що RentMenuState реалізує MenuState
+                context.setState(new RentMenuState(realEstateService));
                 break;
             case 2:
-                context.setState(new BuyMenuState());  // Переконайтесь, що BuyMenuState реалізує MenuState
+                context.setState(new BuyMenuState(realEstateService));
                 break;
             case 3:
                 System.out.println("Exiting...");
@@ -27,7 +35,7 @@ public class MainMenuState implements MenuState {  // Реалізуємо MenuS
                 break;
             default:
                 System.out.println("Invalid choice, please try again.");
-                context.setState(new MainMenuState());
+                context.setState(new MainMenuState(realEstateService));
                 break;
         }
 

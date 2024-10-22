@@ -1,7 +1,7 @@
 package model;
 
 public class Garage extends RealEstate {
-    private boolean hasElectricity;
+    private final boolean hasElectricity;
 
     public Garage(String address, double price, boolean hasElectricity) {
         super(address, price);
