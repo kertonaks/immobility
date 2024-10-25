@@ -1,5 +1,3 @@
-
-
 import service.RealEstateService;
 import state.MainMenuState;
 import state.MenuContext;

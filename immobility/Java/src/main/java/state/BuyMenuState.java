@@ -17,7 +17,7 @@ public class BuyMenuState implements MenuState {  // Реалізуємо MenuSt
         System.out.println("2. House");
         System.out.println("3. Garage");
         System.out.println("4. Sort by Price");
-        System.out.println("5. Back to Main Menu");
+        System.out.println("5. Back to main.java.Main Menu");
 
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();

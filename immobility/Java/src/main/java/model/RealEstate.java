@@ -1,5 +1,6 @@
 package model;
 
+
 public abstract class RealEstate {
     protected String address;
     protected double price;

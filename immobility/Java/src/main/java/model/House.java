@@ -1,5 +1,6 @@
 package model;
 
+
 public class House extends RealEstate {
     private final double landArea;
 

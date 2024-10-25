@@ -13,7 +13,7 @@ public class MainMenuState implements MenuState {
 
     @Override
     public void handle() {
-        System.out.println("Main Menu:");
+        System.out.println("main.java.Main Menu:");
         System.out.println("1. Rent");
         System.out.println("2. Buy");
         System.out.println("3. Exit");

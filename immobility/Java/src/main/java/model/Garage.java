@@ -1,5 +1,6 @@
 package model;
 
+
 public class Garage extends RealEstate {
     private final boolean hasElectricity;
 

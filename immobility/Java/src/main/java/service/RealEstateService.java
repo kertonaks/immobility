@@ -1,5 +1,4 @@
 package service;
-
 import model.House;
 
 import model.Garage;
@@ -11,7 +10,6 @@ import model.RealEstate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RealEstateService {
     private static final List<RealEstate> realEstateList = new ArrayList<>();

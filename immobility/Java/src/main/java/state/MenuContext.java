@@ -11,7 +11,7 @@ public class MenuContext {
         if (state != null) {
             state.handle();
         } else {
-            System.out.println("No state set!");
+            System.out.println("No main.java.state set!");
         }
     }
 }
