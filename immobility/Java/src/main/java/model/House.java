@@ -1,16 +1,19 @@
 package model;
 
-
 public class House extends RealEstate {
-    private final double landArea;
+    private double area;
 
-    public House(String address, double price, double landArea) {
-        super(address, price);
-        this.landArea = landArea;
+    public House(int id, String location, double price, double area) {
+        super(id, location, price);
+        this.area = area;
+    }
+
+    public double getArea() {
+        return area;
     }
 
     @Override
     public void displayInfo() {
-        System.out.println("House at " + address + ", price: " + price + ", land area: " + landArea + " sqm");
+        System.out.println("House ID: " + getId() + ", Location: " + getLocation() + ", Price: " + getPrice() + ", Area: " + area);
     }
 }

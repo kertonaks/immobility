@@ -1,17 +1,22 @@
 package model;
 
-
 public abstract class RealEstate {
-    protected String address;
-    protected double price;
+    private int id;
+    private String location;
+    private double price;
 
-    public RealEstate(String address, double price) {
-        this.address = address;
+    public RealEstate(int id, String location, double price) {
+        this.id = id;
+        this.location = location;
         this.price = price;
     }
 
-    public String getAddress() {
-        return address;
+    public int getId() {
+        return id;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     public double getPrice() {

@@ -1,15 +1,19 @@
 package model;
 
 public class Apartment extends RealEstate {
-    private final int rooms;
+    private int rooms;
 
-    public Apartment(String address, double price, int rooms) {
-        super(address, price);
+    public Apartment(int id, String location, double price, int rooms) {
+        super(id, location, price);
         this.rooms = rooms;
+    }
+
+    public int getRooms() {
+        return rooms;
     }
 
     @Override
     public void displayInfo() {
-        System.out.println("Apartment at " + address + ", price: " + price + ", rooms: " + rooms);
+        System.out.println("Apartment ID: " + getId() + ", Location: " + getLocation() + ", Price: " + getPrice() + ", Rooms: " + rooms);
     }
 }

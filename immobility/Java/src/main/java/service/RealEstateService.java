@@ -1,74 +1,176 @@
 package service;
-import model.House;
 
-import model.Garage;
+import db.DatabaseConnection;
 import model.Apartment;
-
-
+import model.Garage;
+import model.House;
 import model.RealEstate;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class RealEstateService {
-    private static final List<RealEstate> realEstateList = new ArrayList<>();
-    static {
-     realEstateList.add(new House("Chernivtsi", 10.00, 20.00));
-     realEstateList.add(new Apartment("Chernivtsi", 200.00, 2));
-     realEstateList.add(new Apartment("Chernivtsi", 300.00, 5));
-     realEstateList.add(new Garage("Chernivtsi", 1.00, false));
 
+    // Retrieve all properties from the database
+    public List<RealEstate> getAllRealEstates() {
+        List<RealEstate> realEstateList = new ArrayList<>();
+        String query = "SELECT * FROM RealEstate";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String type = rs.getString("type");
+                String location = rs.getString("location");
+                double price = rs.getDouble("price");
+
+                switch (type) {
+                    case "Apartment":
+                        int rooms = getApartmentRooms(id);
+                        realEstateList.add(new Apartment(id, location, price, rooms));
+                        break;
+                    case "House":
+                        double area = getHouseArea(id);
+                        realEstateList.add(new House(id, location, price, area));
+                        break;
+                    case "Garage":
+                        boolean hasElectricity = getGarageElectricity(id);
+                        realEstateList.add(new Garage(id, location, price, hasElectricity));
+                        break;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return realEstateList;
     }
 
-    // Існуючі методи додавання, видалення тощо
+    // Retrieve a single property by its ID
+    public RealEstate getRealEstateById(int id) {
+        RealEstate realEstate = null;
+        String query = "SELECT * FROM RealEstate WHERE id = ?";
 
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String type = rs.getString("type");
+                String location = rs.getString("location");
+                double price = rs.getDouble("price");
+
+                switch (type) {
+                    case "Apartment":
+                        int rooms = getApartmentRooms(id);
+                        realEstate = new Apartment(id, location, price, rooms);
+                        break;
+                    case "House":
+                        double area = getHouseArea(id);
+                        realEstate = new House(id, location, price, area);
+                        break;
+                    case "Garage":
+                        boolean hasElectricity = getGarageElectricity(id);
+                        realEstate = new Garage(id, location, price, hasElectricity);
+                        break;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return realEstate;
+    }
+
+    // Retrieve apartment rooms by ID
+    private int getApartmentRooms(int id) {
+        String query = "SELECT rooms FROM Apartment WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("rooms");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // Retrieve house area by ID
+    private double getHouseArea(int id) {
+        String query = "SELECT area FROM House WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("area");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // Retrieve garage electricity status by ID
+    private boolean getGarageElectricity(int id) {
+        String query = "SELECT hasElectricity FROM Garage WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getBoolean("hasElectricity");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Sort and display all properties by price
     public void sortByPrice() {
+        List<RealEstate> realEstateList = getAllRealEstates();
         realEstateList.sort(Comparator.comparing(RealEstate::getPrice));
         System.out.println("Sorted by Price:");
         for (RealEstate estate : realEstateList) {
             estate.displayInfo();
         }
     }
-    // Сортування апартаментів за ціною
+
+    // Sort properties by type and price
     public void sortApartmentsByPrice() {
-        // Фільтруємо апартаменти та сортуємо їх за ціною
-        List<Apartment> sortedApartments = realEstateList.stream()
-                .filter(Apartment.class::isInstance)
-                .map(Apartment.class::cast)
-                .sorted((a1, a2) -> Double.compare(a1.getPrice(), a2.getPrice()))
-                .toList();
-
+        List<RealEstate> apartments = filterAndSort("Apartment");
         System.out.println("Sorted Apartments by Price:");
-        for (Apartment apartment : sortedApartments) {
-            apartment.displayInfo();
-        }
+        apartments.forEach(RealEstate::displayInfo);
     }
-    // Сортування будинків за ціною
+
     public void sortHousesByPrice() {
-        List<House> sortedHouses = realEstateList.stream()
-                .filter(House.class::isInstance)
-                .map(House.class::cast)
-                .sorted((h1, h2) -> Double.compare(h1.getPrice(), h2.getPrice()))
-                .toList();
-
+        List<RealEstate> houses = filterAndSort("House");
         System.out.println("Sorted Houses by Price:");
-        for (House house : sortedHouses) {
-            house.displayInfo();
-        }
+        houses.forEach(RealEstate::displayInfo);
     }
 
-    // Сортування гаражів за ціною
     public void sortGaragesByPrice() {
-        List<Garage> sortedGarages = realEstateList.stream()
-                .filter(Garage.class::isInstance)
-                .map(Garage.class::cast)
-                .sorted((g1, g2) -> Double.compare(g1.getPrice(), g2.getPrice()))
-                .toList();
-
+        List<RealEstate> garages = filterAndSort("Garage");
         System.out.println("Sorted Garages by Price:");
-        for (Garage garage : sortedGarages) {
-            garage.displayInfo();
+        garages.forEach(RealEstate::displayInfo);
+    }
+
+    // Helper method to filter by type and sort by price
+    private List<RealEstate> filterAndSort(String type) {
+        List<RealEstate> filteredList = new ArrayList<>();
+        for (RealEstate estate : getAllRealEstates()) {
+            if (estate.getClass().getSimpleName().equals(type)) {
+                filteredList.add(estate);
+            }
         }
+        filteredList.sort(Comparator.comparing(RealEstate::getPrice));
+        return filteredList;
     }
 }

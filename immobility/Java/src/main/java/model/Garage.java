@@ -1,16 +1,19 @@
 package model;
 
-
 public class Garage extends RealEstate {
-    private final boolean hasElectricity;
+    private boolean hasElectricity;
 
-    public Garage(String address, double price, boolean hasElectricity) {
-        super(address, price);
+    public Garage(int id, String location, double price, boolean hasElectricity) {
+        super(id, location, price);
         this.hasElectricity = hasElectricity;
+    }
+
+    public boolean isHasElectricity() {
+        return hasElectricity;
     }
 
     @Override
     public void displayInfo() {
-        System.out.println("Garage at " + address + ", price: " + price + ", electricity: " + hasElectricity);
+        System.out.println("Garage ID: " + getId() + ", Location: " + getLocation() + ", Price: " + getPrice() + ", Has Electricity: " + hasElectricity);
     }
 }

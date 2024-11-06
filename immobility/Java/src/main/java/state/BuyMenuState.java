@@ -1,8 +1,9 @@
 package state;
 
-import java.util.Scanner;
 import service.RealEstateService;
-public class BuyMenuState implements MenuState {  // Реалізуємо MenuState
+import java.util.Scanner;
+
+public class BuyMenuState implements MenuState {
 
     private final RealEstateService realEstateService;
 
@@ -17,12 +18,11 @@ public class BuyMenuState implements MenuState {  // Реалізуємо MenuSt
         System.out.println("2. House");
         System.out.println("3. Garage");
         System.out.println("4. Sort by Price");
-        System.out.println("5. Back to main.java.Main Menu");
+        System.out.println("5. Back to Main Menu");
 
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
 
-        MenuContext context = new MenuContext();
         switch (choice) {
             case 1:
                 System.out.println("Selected Apartment for Purchase");
@@ -40,14 +40,12 @@ public class BuyMenuState implements MenuState {  // Реалізуємо MenuSt
                 realEstateService.sortByPrice();
                 break;
             case 5:
-                context.setState(new MainMenuState(realEstateService));
+                new MenuContext().setState(new MainMenuState(realEstateService));
                 break;
             default:
                 System.out.println("Invalid choice, please try again.");
-                context.setState(new BuyMenuState(realEstateService));
+                new MenuContext().setState(this);
                 break;
         }
-
-        context.handle();
     }
 }
