@@ -1,0 +1,5 @@
+Main.class
+model/Apartment.class
+model/Garage.class
+service/ValidationService.class
+model/RealEstate.class
