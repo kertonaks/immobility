@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;  // Імпорт правильного класу для Hibernate
 
-@Configuration
+//@Configuration
 @ComponentScan(basePackages = "com.java")  // Замість 'com.yourpackage' використовуйте ваш пакет
 class AppConfig {
 
