@@ -1,26 +1,17 @@
-import DatabaseService.DatabaseService;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.ApplicationContext;
 import service.RealEstateService;
-import state.MainMenuState;
-import state.MenuContext;
-
-import java.sql.SQLException;
-
-public class Main {
+public class MainApp {
     public static void main(String[] args) {
-        DatabaseService dbService = new DatabaseService();
+        // Ініціалізація Spring контексту
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        // Додаємо нову нерухомість
-        dbService.addRealEstate("789 Oak Street", 125000.00, "House");
+        // Отримуємо сервіс через Spring
+        RealEstateService realEstateService = context.getBean(RealEstateService.class);
 
-        // Додаємо квартиру
-        dbService.addApartment(2, 3);  // Для нерухомості з id 2
-
-        // Оновлюємо ціну для нерухомості з id = 1
-        dbService.updateRealEstatePrice(1, 130000.00);
-
-        // Видаляємо нерухомість з id = 4
-        dbService.deleteRealEstate(4);
+        // Тепер можна використовувати сервіс для взаємодії з даними
+        realEstateService.getAllRealEstates().forEach(realEstate -> {
+            System.out.println(realEstate.getLocation());
+        });
     }
 }
-
-

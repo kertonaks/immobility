@@ -22,6 +22,9 @@ public abstract class RealEstate {
         this.location = location;
         this.price = price;
     }
+    public String getLocation() {
+        return location;
+    }
 
     // Getters and Setters
 }

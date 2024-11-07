@@ -1,9 +1,6 @@
 package service;
-
 import model.RealEstate;
-import model.House;
-import model.Apartment;
-import model.Garage;
+import org.springframework.stereotype.Service;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -11,8 +8,14 @@ import org.hibernate.cfg.Configuration;
 
 import java.util.List;
 
+@Service
 public class RealEstateService {
-    private static final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+    private final SessionFactory sessionFactory;
+
+    // Впроваджуємо SessionFactory через конструктор
+    public RealEstateService(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     // Save or Update RealEstate
     public void saveOrUpdateRealEstate(RealEstate realEstate) {
@@ -56,9 +59,5 @@ public class RealEstateService {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
         }
-    }
-
-    public void close() {
-        sessionFactory.close();
     }
 }
